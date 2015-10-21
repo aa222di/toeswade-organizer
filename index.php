@@ -7,4 +7,10 @@ ini_set('display_errors', 'On');
 require_once('autoloader.php');
 session_start();
 
-$test = new \Toeswade\Theme\CTheme('Test');
+$config = include('app/basic/config/config.php');
+
+$test = new \Toeswade\Theme\CTheme($config);
+	//var_dump($_SERVER);
+
+$test->indexAction();
+
