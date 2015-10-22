@@ -7,10 +7,31 @@ ini_set('display_errors', 'On');
 require_once('autoloader.php');
 session_start();
 
-$config = include('app/basic/config/config.php');
 
-$test = new \Toeswade\Theme\CTheme($config);
-	//var_dump($_SERVER);
+// Start db
+$db = new \Toeswade\Database\Database('localhost', 'toeswade', 'root', 'root');
 
-$test->indexAction();
+
+$nav = new \Toeswade\Navigation\CNavigation();
+
+// Start page
+$start = new \Toeswade\Navigation\NavItem('Start', '');
+$nav->addNavigationItem($start); 
+
+// Customer page
+$controller = new \Toeswade\Customer\CCustomer($db);
+$test = new \Toeswade\Navigation\NavItem('Customers', 'customers', $controller);
+$nav->addNavigationItem($test); 
+
+// Add new Customer page
+$controller = new \Toeswade\Customer\CCustomer($db);
+$test = new \Toeswade\Navigation\NavItem('Add customer', 'customers', $controller, 'create');
+$nav->addNavigationItem($test); 
+
+// Start theme
+$path = 'app/basic/';
+$themeEngine = new \Toeswade\Theme\CTheme($path, $db, $nav);
+
+
+$themeEngine->indexAction();
 

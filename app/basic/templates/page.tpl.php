@@ -2,7 +2,7 @@
 <html lang='sv'>
 	<head>
 		<meta charset='utf-8'/>
-		<title>Test</title>
+		<title><?php if(isset($this->title)) echo $this->title?></title>
 	</head>
 
 	<body>
@@ -10,12 +10,12 @@
 
 		<header id='header'>
 			<p>Här hamnar nav och header</p>
-			<?php if(isset($nav)) echo $nav?>
+			<?php if(isset($this->nav)) echo $this->nav?>
 		</header>
 
 		<main>
 
-			<?php if(isset($main)) echo $main?>
+			<?php if(isset($this->main)) echo $this->main?>
 
 		</main>
 

@@ -8,23 +8,29 @@ namespace Toeswade;
 
 interface ICRUD
 {	
+
+	/*
+	 *	Will be called if no action is specified
+	 */
+    public function index();
+
 	/*
 	 *	Will create new content of some sort, or at least show create view
 	 */
-    public function createAction();
+    public function create();
 
     /*
 	 *	Will read content
 	 */
-    public function readAction();
+    public function read();
 
     /*
 	 *	Will update content or at least show edit view
 	 */
-    public function updateAction();
+    public function update();
 
     /*
 	 *	Will delete content or at least show delete view
 	 */
-    public function deleteAction();
+    public function delete();
 }

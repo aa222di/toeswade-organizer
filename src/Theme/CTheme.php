@@ -15,19 +15,13 @@ class CTheme
 		 * @param associative array $config
 		 * @return void
 		 */
-		public function __construct( array $config ) 
+		public function __construct(  $path ,\Toeswade\Database\Database $db , \Toeswade\Navigation\CNavigation $nav ) 
 		{
-			if(isset($config['theme']) && isset($config['database']) && isset($config['navigation'])) {
-				extract($config);
-				$this->nav = new \Toeswade\Navigation\CNavigation($navigation);
-				$this->db  = new \Toeswade\Database\Database($database);
-				$this->theme = $theme;
-				$this->view = new VTheme($theme);
-			}
-
-			else {
-				throw new \Exception('Config file is not complete');
-			}
+	
+				$this->nav = $nav;
+				$this->db  = $db;
+				$this->view = new VTheme($path);
+			
 			
 		}
 
@@ -36,10 +30,33 @@ class CTheme
 		 *
 		 */
 		public function indexAction() {
-			$content['main'] = 'main';
-			$content['nav']  = $this->nav->getMainNavigation();
 
-			$this->view->render($content);
+			$controller = $this->nav->getPageController();
+			if(isset($controller) && is_object($controller)) {
+
+				$action = $this->nav->getPageAction();
+				
+				if(isset($action)) {
+					$main = $controller->$action();
+					$title = $main;
+				}
+				else {
+					$main = $controller->index();
+					$title = $main;
+				}
+
+			}
+
+			else {
+				$main = 'default';
+				$title = $main;
+			}
+
+			$this->view->setTitle($title);
+			$this->view->setMain($main);
+			$this->view->setNav($this->nav->getMainNavigation());
+
+			$this->view->render();
 		}
 
 }

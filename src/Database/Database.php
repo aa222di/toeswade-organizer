@@ -12,9 +12,8 @@ class Database
 	 * @param associative array $config, defined in app/themeName/config/config.php
 	 * @return void
 	 */
-	public function __construct( array $config ) 
+	public function __construct( $host, $dbname, $user, $password ) 
 	{	
-		extract($config);
 		try {
 		    $this->db = new \PDO('mysql:host=' . $host . ';dbname=' . $dbname . '', $user, $password);
 		    $this->db->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
