@@ -2,7 +2,7 @@
   RewriteEngine on
  
   # Must use RewriteBase on www.student.bth.se, Rewritebase for url /~mos/test is /~mos/test/
-  RewriteBase  /toeswade/toeswade-organizer/index.php/mod_rewrite
+  RewriteBase  /toeswade/toeswade-organizer/mod_rewrite
  
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
