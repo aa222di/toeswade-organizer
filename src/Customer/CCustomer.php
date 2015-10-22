@@ -7,10 +7,14 @@ class CCustomer implements \Toeswade\ICRUD
 
 
 	private $db;
+	private $view;
+	private $CustomerCatalogue;
 
 	public function __construct(\Toeswade\Database\Database $db) 
 	{
 		$this->db = $db;
+		$this->view = new VCustomer();
+		$this->CustomerCatalogue = new CustomerCatalogue($db);
 		
 	}
 
@@ -20,7 +24,7 @@ class CCustomer implements \Toeswade\ICRUD
 	 */
     public function index()
     {
-    	return 'index';
+    	return $this->read();
     }
 
 	/*
@@ -28,7 +32,35 @@ class CCustomer implements \Toeswade\ICRUD
 	 */
     public function create()
     {
-    	return 'create';
+    	if($this->view->hasFormBeenPosted()) {
+
+    		// Get a NewCustomer object from view
+    		$customerToConvert = $this->view->getNewCustomerInfo();
+
+    		// Try to convert it into a "real" customer
+    		try {
+    			$newCustomer = new Customer($customerToConvert);
+    		} catch (\Exception $e) {
+    			return $e->getMessage();
+    		}
+
+    		// If success - try to add it to customer catalogue
+    		if(is_object($newCustomer)) {
+
+    			try {
+    				$this->CustomerCatalogue->addCustomer($newCustomer);
+    			} catch (\Exception $e) {
+    				return $e->getMessage();
+    			}
+
+    			$this->view->setSuccessCreateMessage();
+    			return $this->read();
+    		}
+    	}
+    	else {
+    		$form = $this->view->getCreateForm();
+    		return $form;
+    	}
     }
 
     /*
@@ -36,7 +68,9 @@ class CCustomer implements \Toeswade\ICRUD
 	 */
     public function read()
     {
-    	return 'read';
+    	$cat = $this->CustomerCatalogue->getCustomerCatalogue();
+    	$list = $this->view->listAllCustomers($cat);
+    	return $list;
     }
 
     /*

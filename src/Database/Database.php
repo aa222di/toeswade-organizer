@@ -15,7 +15,7 @@ class Database
 	public function __construct( $host, $dbname, $user, $password ) 
 	{	
 		try {
-		    $this->db = new \PDO('mysql:host=' . $host . ';dbname=' . $dbname . '', $user, $password);
+		    $this->db = new \PDO('mysql:host=' . $host . ';dbname=' . $dbname . ';charset=utf8', $user, $password);
 		    $this->db->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
 		} catch (\PDOException $e) {
 		    print "Error!: " . $e->getMessage() . "<br/>";

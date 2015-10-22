@@ -1,9 +1,7 @@
 <IfModule mod_rewrite.c>
   RewriteEngine on
- 
-  # Must use RewriteBase on www.student.bth.se, Rewritebase for url /~mos/test is /~mos/test/
-  # RewriteBase  /var/www/toeswade/toeswade-organizer/mod_rewrite
- 
+
+  # Redirect all requests to the same script: index.php in root 
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
  
