@@ -18,7 +18,7 @@ if ($_SERVER['HTTP_HOST'] == 'localhost') {
 	$user = 'root';
 	$pwd = 'root';
 }
-
+echo ($user . '...' . $pwd);
 $db = new \Toeswade\Database\Database('localhost', 'toeswade', $user, $pwd);
 
 
