@@ -9,7 +9,17 @@ session_start();
 
 
 // Start db
-$db = new \Toeswade\Database\Database('localhost', 'toeswade', 'root', 'root');
+// CONNECT TO DATABASE
+	$user = 'toeswade';
+	$pwd = 'password123';
+
+// SMALL CHECK TO HAVE THE SAME CODE ON SERVER AND LOCALHOST
+if ($_SERVER['HTTP_HOST'] == 'localhost') {
+	$user = 'root';
+	$pwd = 'root';
+}
+
+$db = new \Toeswade\Database\Database('localhost', 'toeswade', $user, $pwd);
 
 
 $nav = new \Toeswade\Navigation\CNavigation();
