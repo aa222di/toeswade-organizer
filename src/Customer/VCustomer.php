@@ -27,12 +27,34 @@ class VCustomer
 		// SESSION VARIABLES
 		private static $messageStorageInSession 	= 'VCustomer::MessageStorage';
 
+		// PAGE VARIABLES
+		private $pageTitle;
+		private $HTML;
+
 
 		public function __construct(  ) 
 		{
 			assert(isset($_SESSION));
 		}
 
+		// GET PAGE VARIABLES
+		public function getHTML() {
+			if(isset($this->HTML)){
+				return $this->HTML;
+			}
+			else {
+				return 'HTML has not been set';
+			}
+		}
+
+		public function getTitle() {
+			if(isset($this->pageTitle)){
+				return $this->pageTitle;
+			}
+			else {
+				return 'Page title has not been set';
+			}
+		}
 
 		// GET FORMS OR TABLES
 
@@ -40,10 +62,14 @@ class VCustomer
 		 * Creates form for adding customer
 		 * @return string html
 		 */
-		public function getCreateForm() 
+		public function createForm() 
 		{
 			$form = $this->renderHTMLForCustomerForm('create');
-			return $form;
+			
+			// Set page title
+			$this->pageTitle = 'Create new customer';
+			// Set HTML
+			$this->HTML = $form;
 		}
 
 		/*
@@ -51,21 +77,26 @@ class VCustomer
 		 * @param customer object to update
 		 * @return string html
 		 */
-		public function getUpdateForm( Customer $customerToUpdate ) 
+		public function updateForm( Customer $customerToUpdate ) 
 		{	
 			$this->name 	 = $customerToUpdate->getName();
 			$this->surname   = $customerToUpdate->getSurname();
 			$this->telephone = $customerToUpdate->getTelephone();
 			$this->email 	 = $customerToUpdate->getEmail();
 			$form = $this->renderHTMLForCustomerForm('update');
-			return $form;
+			
+			// Set page title
+			$this->pageTitle = 'Update customer';
+			// Set HTML
+			$this->HTML = $form;
 		}
 
 		/*
 		 * @return string
 		 */
-		public function getDeleteForm(Customer $customerToDelete) 
+		public function deleteForm(Customer $customerToDelete) 
 		{
+		
 			$link = \Toeswade\Navigation\VNavigation::createActionLink('read');
 			$form ='<form method="post" class="delete-customer"> 
 					<fieldset>
@@ -74,14 +105,17 @@ class VCustomer
 							<input type="submit" name="' .  self::$postDeleteCustomer . '" value="Yes, delete customer" />
 					</fieldset>
 				</form>';
-
-			return $this->errorMessage . $form;
+			
+			// Set page title
+			$this->pageTitle = 'Delete customer';
+			// Set HTML
+			$this->HTML = $this->errorMessage . $form;;
 		}
 
 		/*
 		 * @return boolean
 		 */
-		public function getResetForm() 
+		public function resetForm() 
 		{
 			$link = \Toeswade\Navigation\VNavigation::createActionLink('read');
 			$form ='<form method="post" class="reset-customer-database"> 
@@ -92,7 +126,10 @@ class VCustomer
 					</fieldset>
 				</form>';
 
-			return $this->errorMessage . $form;
+		 	// Set page title
+			$this->pageTitle = 'Reset customer database';
+			// Set HTML
+			$this->HTML = $this->errorMessage . $form;;
 		}
 
 		/*
@@ -121,7 +158,10 @@ class VCustomer
 			}
 			$html .= '</tbody></table>';
 
-			return $message . $html;
+			// Set page title
+			$this->pageTitle = 'List customers';
+			// Set HTML
+			$this->HTML = $message . $html;
 		}
 
 

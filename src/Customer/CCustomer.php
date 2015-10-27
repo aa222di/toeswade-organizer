@@ -49,7 +49,6 @@ class CCustomer implements \Toeswade\IController
     		// If success - try to add it to customer catalogue
     		if(isset($newCustomer) && is_object($newCustomer)) {
 
-        
 
     			try {
                     $this->CustomerCatalogue->addCustomer($newCustomer);
@@ -63,7 +62,6 @@ class CCustomer implements \Toeswade\IController
                 // Redirect to customer listing
                 $controller = new CCustomer($this->db);
                 $nav = new \Toeswade\Navigation\NavItem('Customers', 'customers', $controller,  'read');
-
                 \Toeswade\Navigation\VNavigation::redirectTo($nav);
 
                 }
@@ -71,8 +69,8 @@ class CCustomer implements \Toeswade\IController
     		}
     	}
 
-    	$form = $this->view->getCreateForm();
-    	return $form;
+    	$this->view->createForm();
+    	return $this->view;
     	
     }
 
@@ -83,8 +81,8 @@ class CCustomer implements \Toeswade\IController
     public function read()
     {
     	$cat = $this->CustomerCatalogue->getCustomerCatalogue();
-    	$list = $this->view->listAllCustomers($cat);
-    	return $list;
+    	$this->view->listAllCustomers($cat);
+    	return $this->view;
     }
 
     /*
@@ -118,8 +116,8 @@ class CCustomer implements \Toeswade\IController
         }
 
         $customer = $this->CustomerCatalogue->getCustomer($id);
-        $form = $this->view->getUpdateForm($customer);
-        return $form;
+        $this->view->updateForm($customer);
+        return $this->view;
     }
 
     /*
@@ -138,18 +136,17 @@ class CCustomer implements \Toeswade\IController
 
             if($this->CustomerCatalogue->wasCustomerSuccessfullyDeleted()) {
                 $this->view->setSuccessDeleteMessage( $customer->getFullname() );
+                
                 // Redirect to customer listing
                 $controller = new CCustomer($this->db);
                 $nav = new \Toeswade\Navigation\NavItem('Customers', 'customers', $controller,  'read');
-
                 \Toeswade\Navigation\VNavigation::redirectTo($nav);
             }
             
         }
-
        
-        $form = $this->view->getDeleteForm($customer);
-        return $form;
+        $this->view->deleteForm($customer);
+        return $this->view;
     }
 
     /*
@@ -166,18 +163,18 @@ class CCustomer implements \Toeswade\IController
 
             if($this->CustomerCatalogue->wasCustomerDatabaseSuccessfullyReset()) {
                 $this->view->setSuccessResetMessage();
+                
                 // Redirect to customer listing
                 $controller = new CCustomer($this->db);
                 $nav = new \Toeswade\Navigation\NavItem('Customers', 'customers', $controller,  'read');
-
                 \Toeswade\Navigation\VNavigation::redirectTo($nav);
             }
             
         }
 
        
-        $form = $this->view->getResetForm();
-        return $form;
+        $this->view->resetForm();
+        return $this->view;
     }
 
 

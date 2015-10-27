@@ -9,7 +9,7 @@
 		<div id='wrapper'>
 
 		<header id='header'>
-			<p>Här hamnar nav och header</p>
+			<h1>Organizer</h1>
 			<?php if(isset($this->nav)) echo $this->nav?>
 		</header>
 
@@ -21,7 +21,7 @@
 
 
 		<footer>
-			<p>Här hamnar footern</p>
+			<p>Amanda Marie Åberg | aa222di | Webbutveckling med PHP | Linnéuniversitetet</p>
 		</footer>
 
 		</div>

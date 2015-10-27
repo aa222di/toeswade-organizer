@@ -17,12 +17,9 @@ class CTheme
 		 */
 		public function __construct(  $path ,\Toeswade\Database\Database $db , \Toeswade\Navigation\CNavigation $nav ) 
 		{
-	
-				$this->nav = $nav;
-				$this->db  = $db;
-				$this->view = new VTheme($path);
-			
-			
+			$this->nav = $nav;
+			$this->db  = $db;
+			$this->view = new VTheme($path);		
 		}
 
 		/*
@@ -39,13 +36,15 @@ class CTheme
 				$params = $this->nav->getParams();
 				
 				if(isset($action)) {
-					$main = $controller->$action($params);
-					$title = 'test';
+					$view = $controller->$action($params);
+					
 				}
 				else {
-					$main = $controller->index();
-					$title = 'test';
+					$view = $controller->index();
 				}
+
+				$main = $view->getHTML();
+				$title = $view->getTitle();
 
 			}
 
