@@ -9,12 +9,13 @@ class NavItem
 		private $url; 
 		private $controller; 
 		private $action; 
+		private $params;
 
 		/* Create menu item with text and url, and (optional) controller (obj) and action (string to method on object)
 		 *
 		 *
 		 */
-		public function __construct( $text, $url, $controller=null, $action=null ) 
+		public function __construct( $text, $url, $controller=null, $action=null, $params=null ) 
 		{
 			if(is_string($text)) {
 				$this->text = $text;
@@ -46,6 +47,15 @@ class NavItem
 					throw new \Exception('Action must be a string');
 				}
 			}
+
+			if(isset($params)) {
+				//if(is_array($params)) {
+					$this->params = $params;
+				//}
+				//else {
+					//throw new \Exception('Parameters must be passed as a array');
+				//}
+			}
 		}
 
 		// GETTERS
@@ -70,6 +80,11 @@ class NavItem
 		public function getAction() 
 		{
 			return $this->action;
+		}
+
+		public function getParams() 
+		{
+			return $this->params;
 		}
 
 

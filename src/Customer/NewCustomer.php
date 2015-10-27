@@ -43,7 +43,7 @@ class NewCustomer
 		
 		public function getTelephone() 
 		{	
-			$this->telephone = intval(trim($this->telephone));
+			$this->telephone = trim($this->telephone);
 			return $this->telephone;
 		}
 
@@ -55,6 +55,14 @@ class NewCustomer
 		public function getId() 
 		{
 			return $this->id;
+		}
+
+		// SETTERS
+
+		public function setId($id) 
+		{
+			assert(is_numeric($id));
+			$this->id = $id;
 		}
 
 

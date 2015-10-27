@@ -37,6 +37,16 @@ class CNavigation
 			return $action;
 		}
 
+
+		/*
+		 * @return string
+		 */
+		public function getParams() 
+		{
+			$params = $this->view->getParams();
+			return $params;
+		}
+
 		/*
 		 * @return string
 		 */

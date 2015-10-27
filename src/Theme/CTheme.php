@@ -26,23 +26,25 @@ class CTheme
 		}
 
 		/*
-		 *
-		 *
+		 * Indexes app and get controller and action to render page
+		 * @return void, but calls to view which returns string.
 		 */
-		public function indexAction() {
+		public function index() {
 
 			$controller = $this->nav->getPageController();
 			if(isset($controller) && is_object($controller)) {
+				assert($controller instanceof \Toeswade\IController);
 
 				$action = $this->nav->getPageAction();
+				$params = $this->nav->getParams();
 				
 				if(isset($action)) {
-					$main = $controller->$action();
-					$title = $main;
+					$main = $controller->$action($params);
+					$title = 'test';
 				}
 				else {
 					$main = $controller->index();
-					$title = $main;
+					$title = 'test';
 				}
 
 			}
@@ -51,7 +53,6 @@ class CTheme
 				$main = 'default';
 				$title = $main;
 			}
-
 			$this->view->setTitle($title);
 			$this->view->setMain($main);
 			$this->view->setNav($this->nav->getMainNavigation());

@@ -2,7 +2,7 @@
 
 namespace Toeswade\Customer; 
 	
-class CCustomer implements \Toeswade\ICRUD
+class CCustomer implements \Toeswade\IController
 {
 
 
@@ -20,7 +20,8 @@ class CCustomer implements \Toeswade\ICRUD
 
 
 	/*
-	 *	Will create new content of some sort, or at least show create view
+	 * Dispatches to default action
+     * @return string
 	 */
     public function index()
     {
@@ -28,43 +29,56 @@ class CCustomer implements \Toeswade\ICRUD
     }
 
 	/*
-	 *	Will create new content of some sort, or at least show create view
+	 * Gets the create form from the view and send user input to model to try to create new customer object
+     * @return string
 	 */
     public function create()
     {
-    	if($this->view->hasFormBeenPosted()) {
+    	if($this->view->hasCreateFormBeenPosted()) {
 
     		// Get a NewCustomer object from view
-    		$customerToConvert = $this->view->getNewCustomerInfo();
+    		$customerToConvert = $this->view->getFormInfo();
 
-    		// Try to convert it into a "real" customer
+    		// Try to convert it into a Customer object
     		try {
     			$newCustomer = new Customer($customerToConvert);
     		} catch (\Exception $e) {
-    			return $e->getMessage();
+    			$this->view->setErrorMessage($e);
     		}
 
     		// If success - try to add it to customer catalogue
-    		if(is_object($newCustomer)) {
+    		if(isset($newCustomer) && is_object($newCustomer)) {
+
+        
 
     			try {
-    				$this->CustomerCatalogue->addCustomer($newCustomer);
+                    $this->CustomerCatalogue->addCustomer($newCustomer);
     			} catch (\Exception $e) {
-    				return $e->getMessage();
+    				$this->view->setErrorMessage($e);
     			}
 
-    			$this->view->setSuccessCreateMessage();
-    			return $this->read();
+                if($this->CustomerCatalogue->wasCustomerSuccessfullyAdded()) {
+                $this->view->setSuccessCreateMessage();
+
+                // Redirect to customer listing
+                $controller = new CCustomer($this->db);
+                $nav = new \Toeswade\Navigation\NavItem('Customers', 'customers', $controller,  'read');
+
+                \Toeswade\Navigation\VNavigation::redirectTo($nav);
+
+                }
+
     		}
     	}
-    	else {
-    		$form = $this->view->getCreateForm();
-    		return $form;
-    	}
+
+    	$form = $this->view->getCreateForm();
+    	return $form;
+    	
     }
 
     /*
-	 *	Will read content
+	 * Gets the customer catalogue and injects it into the view
+     * @return string
 	 */
     public function read()
     {
@@ -76,17 +90,94 @@ class CCustomer implements \Toeswade\ICRUD
     /*
 	 *	Will update content or at least show edit view
 	 */
-    public function update()
+    public function update($id)
     {
+        if($this->view->hasUpdateFormBeenPosted()) {
 
+            $customerToUpdate = $this->view->getFormInfo();
+            $customerToUpdate->setId($id);
+
+            // Try to convert it into a Customer object to check that new info is valid for customer
+            try {
+                $customer = new Customer($customerToUpdate);
+            } catch (\Exception $e) {
+                $this->view->setErrorMessage($e);
+            }
+            
+            if(isset($customer) && is_object($customer)) {
+                try {
+                    $this->CustomerCatalogue->updateCustomer($customer);
+                } catch (\Exception $e) {
+                    $this->view->setErrorMessage($e);
+                }
+
+                if($this->CustomerCatalogue->wasCustomerSuccessfullyUpdated()) {
+                    $this->view->setSuccessUpdateMessage();
+                }
+            }
+        }
+
+        $customer = $this->CustomerCatalogue->getCustomer($id);
+        $form = $this->view->getUpdateForm($customer);
+        return $form;
     }
 
     /*
 	 *	Will delete content or at least show delete view
 	 */
-    public function delete()
+    public function delete($id)
     {
+        $customer = $this->CustomerCatalogue->getCustomer($id);
 
+        if($this->view->hasDeleteFormBeenPosted()) {
+            try {
+                $this->CustomerCatalogue->deleteCustomer( $customer );
+            } catch (\Exception $e) {
+                $this->view->setErrorMessage($e);
+            }
+
+            if($this->CustomerCatalogue->wasCustomerSuccessfullyDeleted()) {
+                $this->view->setSuccessDeleteMessage( $customer->getFullname() );
+                // Redirect to customer listing
+                $controller = new CCustomer($this->db);
+                $nav = new \Toeswade\Navigation\NavItem('Customers', 'customers', $controller,  'read');
+
+                \Toeswade\Navigation\VNavigation::redirectTo($nav);
+            }
+            
+        }
+
+       
+        $form = $this->view->getDeleteForm($customer);
+        return $form;
+    }
+
+    /*
+     *  Resets the database
+     */
+    public function reset()
+    {
+        if($this->view->hasResetFormBeenPosted()) {
+            try {
+                $this->CustomerCatalogue->resetCustomerDatabase();
+            } catch (\Exception $e) {
+                $this->view->setErrorMessage($e);
+            }
+
+            if($this->CustomerCatalogue->wasCustomerDatabaseSuccessfullyReset()) {
+                $this->view->setSuccessResetMessage();
+                // Redirect to customer listing
+                $controller = new CCustomer($this->db);
+                $nav = new \Toeswade\Navigation\NavItem('Customers', 'customers', $controller,  'read');
+
+                \Toeswade\Navigation\VNavigation::redirectTo($nav);
+            }
+            
+        }
+
+       
+        $form = $this->view->getResetForm();
+        return $form;
     }
 
 
