@@ -329,10 +329,7 @@ class VCustomer
 		 */
 		private function getMessage() 
 		{
-			if(isset($this->successMessage)) {
-				return $this->successMessage;
-			}
-			elseif( isset($_SESSION[self::$messageStorageInSession]) ) {
+			if( isset($_SESSION[self::$messageStorageInSession]) ) {
 				$message = $_SESSION[self::$messageStorageInSession];
 				unset($_SESSION[self::$messageStorageInSession]);
 				return $message;

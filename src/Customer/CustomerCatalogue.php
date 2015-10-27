@@ -131,7 +131,7 @@ class CustomerCatalogue
 		{
 			// Check if there's a customer with this id
 			foreach ($this->catalogue as $key => $customer) {
-				if($customer->getFullName() == $customerToUpdate->getFullName()) {
+				if($customer->getFullName() == $customerToUpdate->getFullName() && $customer->getId() != $customerToUpdate->getId()) {
 					throw new \Toeswade\Exceptions\CustomerExistsException('Customer with equal name already exists');
 				}
 				else {
