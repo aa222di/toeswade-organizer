@@ -9,7 +9,7 @@ namespace Toeswade;
 interface IView
 {	
 	/*
-	 *	Render selected view with the specified theme
+	 *	Render selected view
 	 */
     public function getHTML();
 
