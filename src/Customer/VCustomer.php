@@ -2,7 +2,7 @@
 
 namespace Toeswade\Customer; 
 	
-class VCustomer 
+class VCustomer implements \Toeswade\IView
 {
 		// Customer 
 		private $name;

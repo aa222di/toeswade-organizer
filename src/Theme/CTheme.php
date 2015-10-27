@@ -37,12 +37,12 @@ class CTheme
 				
 				if(isset($action)) {
 					$view = $controller->$action($params);
-					
 				}
 				else {
 					$view = $controller->index();
 				}
 
+				assert($view instanceof \Toeswade\IView);
 				$main = $view->getHTML();
 				$title = $view->getTitle();
 
